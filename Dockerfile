@@ -66,6 +66,9 @@ RUN cmake -GNinja .. -DBUILD_RADIANT_WALLET=OFF -DBUILD_RADIANT_QT=OFF
 RUN ninja
 RUN ninja install
 
+# Remove radiant-node folder, not need more
+RUN rm /root/radiant-node -R
+
 RUN mkdir "/root/.radiant/"
 RUN touch "/root/.radiant/radiant.conf"
 
