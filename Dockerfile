@@ -4,7 +4,7 @@
 
 FROM ubuntu:20.04
 
-LABEL maintainer="info@radiant4people.com"
+LABEL maintainer="code@radiant4people.com"
 LABEL version="1.0.0"
 LABEL description="Docker image for electrumx and radiantd node"
 
