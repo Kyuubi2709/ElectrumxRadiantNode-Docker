@@ -122,5 +122,6 @@ RUN openssl req -new -key server.key -out server.csr -subj "/C=US/ST=Denial/L=Sp
 RUN openssl x509 -req -days 1825 -in server.csr -signkey server.key -out server.crt
 
 EXPOSE 7333 50010 50012
+VOLUME /root
 
 ENTRYPOINT ["/bin/sh", "-c" , "radiantd && python3 /root/electrumx/electrumx_server"]
