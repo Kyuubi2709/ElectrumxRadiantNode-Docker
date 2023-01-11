@@ -86,19 +86,7 @@ rpcthreads=64\n\
 rpcallowip=0.0.0.0/0\
 ' >/root/.radiant/radiant.conf 
 
-####################################################### INSTALL ELECTRUMX WITH SSL
-
-# Create directory for DB
-RUN mkdir /root/electrumdb
-
 WORKDIR /root
-
-# ORIGINAL SOURCE
-RUN git clone --depth 1 --branch master https://github.com/radiantblockchain/electrumx.git
-
-WORKDIR /root/electrumx
-
-RUN python3 -m pip install -r requirements.txt
 
 ENV DAEMON_URL=http://RadiantDockerUser:RadiantDockerPassword@localhost:7332/
 ENV COIN=Radiant
@@ -115,13 +103,10 @@ ENV MAX_SESSIONS=10000
 ENV MAX_SEND=10000000
 ENV MAX_RECV=10000000
 
-# Create SSL
-WORKDIR /root/electrumdb
-RUN openssl genrsa -out server.key 2048
-RUN openssl req -new -key server.key -out server.csr -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=radiant4people.com"
-RUN openssl x509 -req -days 1825 -in server.csr -signkey server.key -out server.crt
+COPY run.sh /run.sh
+RUN chmod 755 /run.sh
 
 EXPOSE 7333 50010 50012
 VOLUME /root
 
-ENTRYPOINT ["/bin/sh", "-c" , "radiantd && python3 /root/electrumx/electrumx_server"]
+ENTRYPOINT ["/bin/sh", "-c" , "run.sh"]
