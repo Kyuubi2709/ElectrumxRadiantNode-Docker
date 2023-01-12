@@ -35,4 +35,5 @@ if [[ ! -f /root/electrumdb/server.key ]]; then
   openssl x509 -req -days 1825 -in server.csr -signkey server.key -out server.crt > /dev/null 2>&1
 fi
 
+echo -e "Starting daemon and electrumx..."
 bash -c "radiantd && python3 /root/electrumx/electrumx_server"
