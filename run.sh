@@ -1,5 +1,23 @@
 #!/usr/bin/env bash
 
+if [[ ! -f /root/.radiant/radiant.conf ]]; then
+echo -e "Creating config file..."
+mkdir /root/.radiant > /dev/null 2>&1
+touch /root/.radiant/radiant.conf
+cat <<- EOF > /root/.radiant/radiant.conf
+rpcuser=${RPC_USER:-RadiantDockerUser}
+rpcpassword=${RPC_PASS:-RadiantDockerPassword}
+listen=1
+daemon=1
+server=1
+rest=1
+daemon=1
+rpcworkqueue=1024
+rpcthreads=64
+rpcallowip=0.0.0.0/0
+EOF
+fi
+
 cd /root
 mkdir /root/electrumdb > /dev/null 2>&1
 if [[ ! -d /root/electrumx ]]; then
