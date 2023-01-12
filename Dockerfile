@@ -90,4 +90,4 @@ RUN chmod 755 /run.sh
 EXPOSE 7333 50010 50012
 VOLUME /root
 
-ENTRYPOINT ["/bin/sh", "-c" , "run.sh"]
+ENTRYPOINT ["/bin/sh", "-c" , "/run.sh"]
