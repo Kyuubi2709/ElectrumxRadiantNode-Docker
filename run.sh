@@ -11,7 +11,6 @@ listen=1
 daemon=1
 server=1
 rest=1
-daemon=1
 rpcworkqueue=1024
 rpcthreads=64
 rpcallowip=0.0.0.0/0
