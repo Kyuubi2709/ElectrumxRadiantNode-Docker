@@ -7,8 +7,23 @@ FROM ubuntu:20.04
 LABEL maintainer="code@radiant4people.com"
 LABEL version="1.0.0"
 LABEL description="Docker image for electrumx and radiantd node"
-
 ARG DEBIAN_FRONTEND=nointeractive
+
+ENV DAEMON_URL=http://${RPC_USER:-RadiantDockerUser}:${RPC_PASS:-RadiantDockerPassword}@localhost:7332/
+ENV COIN=Radiant
+ENV REQUEST_TIMEOUT=60
+ENV DB_DIRECTORY=/root/electrumdb
+ENV DB_ENGINE=leveldb
+ENV SERVICES=tcp://0.0.0.0:50010,SSL://0.0.0.0:50012
+ENV SSL_CERTFILE=/root/electrumdb/server.crt
+ENV SSL_KEYFILE=/root/electrumdb/server.key
+ENV HOST=""
+ENV ALLOW_ROOT=true
+ENV CACHE_MB=10000
+ENV MAX_SESSIONS=10000
+ENV MAX_SEND=10000000
+ENV MAX_RECV=10000000
+
 RUN apt update
 RUN apt-get install -y curl
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
@@ -65,43 +80,9 @@ WORKDIR /root/radiant-node/build
 RUN cmake -GNinja .. -DBUILD_RADIANT_WALLET=OFF -DBUILD_RADIANT_QT=OFF
 RUN ninja
 RUN ninja install
-
 # Remove radiant-node folder, not need more
 RUN rm /root/radiant-node -R
-
-RUN mkdir "/root/.radiant/"
-RUN touch "/root/.radiant/radiant.conf"
-
-RUN echo '\
-rpcuser=RadiantDockerUser\n\
-rpcpassword=RadiantDockerPassword\n\
-\n\
-listen=1\n\
-daemon=1\n\
-server=1\n\
-rest=1\n\
-daemon=1\n\
-rpcworkqueue=1024\n\
-rpcthreads=64\n\
-rpcallowip=0.0.0.0/0\
-' >/root/.radiant/radiant.conf 
-
 WORKDIR /root
-
-ENV DAEMON_URL=http://RadiantDockerUser:RadiantDockerPassword@localhost:7332/
-ENV COIN=Radiant
-ENV REQUEST_TIMEOUT=60
-ENV DB_DIRECTORY=/root/electrumdb
-ENV DB_ENGINE=leveldb
-ENV SERVICES=tcp://0.0.0.0:50010,SSL://0.0.0.0:50012
-ENV SSL_CERTFILE=/root/electrumdb/server.crt
-ENV SSL_KEYFILE=/root/electrumdb/server.key
-ENV HOST=""
-ENV ALLOW_ROOT=true
-ENV CACHE_MB=10000
-ENV MAX_SESSIONS=10000
-ENV MAX_SEND=10000000
-ENV MAX_RECV=10000000
 
 COPY run.sh /run.sh
 RUN chmod 755 /run.sh
