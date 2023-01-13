@@ -14,7 +14,7 @@ ENV COIN=Radiant
 ENV REQUEST_TIMEOUT=60
 ENV DB_DIRECTORY=/root/electrumdb
 ENV DB_ENGINE=leveldb
-ENV SERVICES=tcp://0.0.0.0:50010,SSL://0.0.0.0:50012
+ENV SERVICES=tcp://0.0.0.0:50010,ssl://0.0.0.0:50012,rpc://:8000
 ENV SSL_CERTFILE=/root/electrumdb/server.crt
 ENV SSL_KEYFILE=/root/electrumdb/server.key
 ENV HOST=""
@@ -87,7 +87,7 @@ WORKDIR /root
 COPY run.sh /run.sh
 RUN chmod 755 /run.sh
 
-EXPOSE 7333 50010 50012
+EXPOSE 50010 50012 8000
 VOLUME /root
 
 ENTRYPOINT ["/bin/sh", "-c" , "/run.sh"]
